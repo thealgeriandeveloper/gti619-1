@@ -4,21 +4,22 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateClientsTable extends Migration
+class CreatePasswordHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('password_histories', function (Blueprint $table) {
             $table->id();
-            $table->string('nom'); // <-- à ajouter
-            $table->string('email')->unique();
-            $table->string('type'); // residentiel ou affaires
+            $table->unsignedBigInteger('user_id');
+            $table->string('password'); // hashé
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -29,6 +30,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('password_histories');
     }
 }
